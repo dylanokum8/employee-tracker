@@ -159,7 +159,7 @@ function addDepartment() {
             console.log("department added succesfully");
 db.query(`SELECT * FROM department`, (err, result) => {
     if (err) {
-        res.status(500).json({ error: err.message })
+        res.status(400).json({ error: err.message })
         return;
     }
     console.table(result);
@@ -168,3 +168,68 @@ db.query(`SELECT * FROM department`, (err, result) => {
     });
 });
 };
+
+function addRole() {
+    inquirer.prompt([
+
+        {
+            type: 'input',
+            name: 'addRole',
+            message: 'Please enter the role that you wish to add',
+            validate: addRole => {
+                if (addRole) {
+                    return true;
+                } else {
+                    console.log('Please enter a role to add');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'addSalary',
+            message: 'Please enter the salary for the role that is being added to the database',
+            validate: addSalary => {
+                if (addSalary) {
+                    return true;
+                } else {
+                    console.log('Please enter a salary for the role being added');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'addId',
+            message: 'Please enter the department ID that applies to this new role',
+            validate: addId => {
+                if (addId) {
+                    return true;
+                } else {
+                    console.log('Please enter the department ID that accurately reflects the new Role');
+                    return false;
+                }
+            } 
+        }
+    ])
+
+    .then((answer) => {
+        const sql = `INSERT INTO role (title, salary, department_id) VALUES (?)(?)(?)`;
+        const params = [answer.title, response.salary, response.department_id];
+        db.query(sql, params, (err,result) => {
+            if (err) throw err;
+            console.log("Role added succesfully");
+
+db.query(`SELECT * FROM role`, (err, result) => {
+    if (err) {
+        res.status(400).json({ error: err.message })
+        return;
+    }
+    console.table(result);
+    promptUser();
+        });
+    });
+});
+
+};
+
